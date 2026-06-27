@@ -30,8 +30,8 @@ export default function StressDNACard({ stressDNA }: StressDNACardProps) {
       </div>
 
       <div className="space-y-5">
-        {sortedDNA.map((driver, index) => (
-          <div key={index} className="space-y-2">
+        {sortedDNA.map((driver) => (
+          <div key={driver.driver} className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span className="font-medium text-foreground">{driver.driver}</span>
               <span className="font-mono text-muted-foreground" aria-hidden="true">{driver.percentage}%</span>

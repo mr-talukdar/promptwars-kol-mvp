@@ -231,7 +231,7 @@ export default function MoodTrendChart({ entries }: MoodTrendChartProps) {
                 });
                 return (
                   <text
-                    key={pt.entry.id}
+                    key={`${pt.entry.id}-axis-${i}`}
                     x={pt.x}
                     y={height - paddingY + 20}
                     textAnchor="middle"

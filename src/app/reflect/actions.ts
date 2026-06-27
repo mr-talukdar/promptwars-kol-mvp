@@ -51,7 +51,7 @@ export async function analyzeDay(formData: FormData) {
     // Fetch historical entries for DNA and Pattern generation
     const { data: history } = await supabase
       .from('journal_entries')
-      .select('*')
+      .select('created_at, mood, transcript')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(14); // Last two weeks
