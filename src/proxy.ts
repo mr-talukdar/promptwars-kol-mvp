@@ -24,7 +24,9 @@ export async function proxy(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
     
     if (!user) {
-      return NextResponse.redirect(new URL('/', request.url))
+      const url = request.nextUrl.clone()
+      url.pathname = '/'
+      return NextResponse.redirect(url)
     }
   }
 
