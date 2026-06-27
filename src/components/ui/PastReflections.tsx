@@ -148,7 +148,7 @@ export default function PastReflections({ entries }: PastReflectionsProps) {
                           <span>Hidden Pattern Detected</span>
                         </div>
                         <p className="text-xs italic text-foreground/90 leading-relaxed bg-accent/20 p-2 rounded-md border border-primary/15">
-                          "{entry.hidden_pattern}"
+                          {"\""}{entry.hidden_pattern}{"\""}
                         </p>
                       </div>
                     )}

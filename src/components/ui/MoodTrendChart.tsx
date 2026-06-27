@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { JournalEntry } from '@/lib/types';
 import { TrendingUp, AlertCircle, Info, Sparkles, Brain } from 'lucide-react';
 
@@ -18,15 +18,27 @@ const moodValues: Record<string, { value: number; label: string; color: string; 
 
 export default function MoodTrendChart({ entries }: MoodTrendChartProps) {
   // Sort chronologically (oldest to newest) for chart plotting
-  const sortedEntries = [...entries].sort(
-    (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-  );
+  const sortedEntries = useMemo(() => {
+    return [...entries].sort(
+      (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
+  }, [entries]);
 
-  const [activeIndex, setActiveIndex] = useState<number | null>(
-    sortedEntries.length > 0 ? sortedEntries.length - 1 : null
-  );
+  const [activeIndex, setActiveIndex] = useState<number | null>(() => {
+    return sortedEntries.length > 0 ? sortedEntries.length - 1 : null;
+  });
 
-  if (sortedEntries.length === 0) return null;
+  // Keep activeIndex in bounds if sortedEntries size changes
+  useEffect(() => {
+    const handle = requestAnimationFrame(() => {
+      if (sortedEntries.length > 0) {
+        setActiveIndex(sortedEntries.length - 1);
+      } else {
+        setActiveIndex(null);
+      }
+    });
+    return () => cancelAnimationFrame(handle);
+  }, [sortedEntries.length]);
 
   // Chart setup
   const width = 800;
@@ -37,42 +49,49 @@ export default function MoodTrendChart({ entries }: MoodTrendChartProps) {
   const chartWidth = width - paddingX * 2;
   const chartHeight = height - paddingY * 2;
 
-  // Calculate points
-  const points = sortedEntries.map((entry, idx) => {
-    const x =
-      sortedEntries.length > 1
-        ? paddingX + (idx / (sortedEntries.length - 1)) * chartWidth
-        : paddingX + chartWidth / 2;
+  // Calculate points (memoized to avoid recalculation on hover)
+  const points = useMemo(() => {
+    return sortedEntries.map((entry, idx) => {
+      const x =
+        sortedEntries.length > 1
+          ? paddingX + (idx / (sortedEntries.length - 1)) * chartWidth
+          : paddingX + chartWidth / 2;
 
-    const moodObj = moodValues[entry.mood] || moodValues.neutral;
-    const y =
-      paddingY +
-      chartHeight -
-      ((moodObj.value - 1) / 4) * chartHeight;
+      const moodObj = moodValues[entry.mood] || moodValues.neutral;
+      const y =
+        paddingY +
+        chartHeight -
+        ((moodObj.value - 1) / 4) * chartHeight;
 
-    return { x, y, entry, index: idx };
-  });
+      return { x, y, entry, index: idx };
+    });
+  }, [sortedEntries, chartWidth, chartHeight, paddingX, paddingY]);
 
-  // Construct SVG paths
-  let linePath = '';
-  let areaPath = '';
+  // Construct SVG paths (memoized)
+  const { linePath, areaPath } = useMemo(() => {
+    let linePath = '';
+    let areaPath = '';
 
-  if (points.length > 0) {
-    if (points.length === 1) {
-      // Just a horizontal line or point
-      linePath = `M ${points[0].x - 20} ${points[0].y} L ${points[0].x + 20} ${points[0].y}`;
-      areaPath = `M ${points[0].x - 20} ${points[0].y} L ${points[0].x + 20} ${points[0].y} L ${points[0].x + 20} ${height - paddingY} L ${points[0].x - 20} ${height - paddingY} Z`;
-    } else {
-      // Line path
-      linePath = `M ${points[0].x} ${points[0].y}`;
-      for (let i = 1; i < points.length; i++) {
-        linePath += ` L ${points[i].x} ${points[i].y}`;
+    if (points.length > 0) {
+      if (points.length === 1) {
+        // Just a horizontal line or point
+        linePath = `M ${points[0].x - 20} ${points[0].y} L ${points[0].x + 20} ${points[0].y}`;
+        areaPath = `M ${points[0].x - 20} ${points[0].y} L ${points[0].x + 20} ${points[0].y} L ${points[0].x + 20} ${height - paddingY} L ${points[0].x - 20} ${height - paddingY} Z`;
+      } else {
+        // Line path
+        linePath = `M ${points[0].x} ${points[0].y}`;
+        for (let i = 1; i < points.length; i++) {
+          linePath += ` L ${points[i].x} ${points[i].y}`;
+        }
+
+        // Area path (closed polygon reaching the bottom of the grid)
+        areaPath = `${linePath} L ${points[points.length - 1].x} ${height - paddingY} L ${points[0].x} ${height - paddingY} Z`;
       }
-
-      // Area path (closed polygon reaching the bottom of the grid)
-      areaPath = `${linePath} L ${points[points.length - 1].x} ${height - paddingY} L ${points[0].x} ${height - paddingY} Z`;
     }
-  }
+    return { linePath, areaPath };
+  }, [points, height, paddingY]);
+
+  if (sortedEntries.length === 0) return null;
 
   const activePoint = activeIndex !== null ? points[activeIndex] : null;
 
@@ -226,7 +245,7 @@ export default function MoodTrendChart({ entries }: MoodTrendChartProps) {
         </div>
         <p className="text-xs text-muted-foreground flex items-center gap-1.5 px-1">
           <Info className="h-3.5 w-3.5" />
-          Hover or tap any node to inspect that day's confidence levels, stress DNA, and hidden pattern analysis.
+          Hover or tap any node to inspect that day&apos;s confidence levels, stress DNA, and hidden pattern analysis.
         </p>
       </div>
 
@@ -297,7 +316,7 @@ export default function MoodTrendChart({ entries }: MoodTrendChartProps) {
                   <Sparkles className="h-3 w-3 text-indigo-500" /> HIDDEN PATTERN DETECTED
                 </span>
                 <p className="text-xs text-foreground/90 italic bg-accent/20 p-2.5 rounded-lg border border-primary/10 leading-relaxed">
-                  "{activePoint.entry.hidden_pattern}"
+                  {"\""}{activePoint.entry.hidden_pattern}{"\""}
                 </p>
               </div>
             )}

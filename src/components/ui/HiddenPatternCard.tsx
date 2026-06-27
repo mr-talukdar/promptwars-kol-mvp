@@ -21,7 +21,7 @@ export default function HiddenPatternCard({ pattern }: HiddenPatternCardProps) {
         aria-live="polite"
       >
         <p className="text-base leading-relaxed text-foreground/90 font-medium italic">
-          "{pattern}"
+          {"\""}{pattern}{"\""}
         </p>
       </div>
     </div>

@@ -12,8 +12,12 @@ export default function ThemeToggle() {
     const sysPref = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     const initialTheme = stored || sysPref;
     
-    setTheme(initialTheme);
     document.documentElement.setAttribute('data-theme', initialTheme);
+    
+    const handle = requestAnimationFrame(() => {
+      setTheme(initialTheme);
+    });
+    return () => cancelAnimationFrame(handle);
   }, []);
 
   const toggleTheme = () => {

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import MoodSelector from '@/components/ui/MoodSelector';
 import { MoodType } from '@/lib/types';
 import { analyzeDay } from './actions';
-import { Loader2, Mic, Square, Trash2, Send, Paperclip } from 'lucide-react';
+import { Loader2, Mic, Square, Trash2, Send } from 'lucide-react';
 
 export default function ReflectPage() {
   const router = useRouter();
@@ -138,7 +138,7 @@ export default function ReflectPage() {
       <div className="space-y-10">
         <div className="space-y-3 text-center">
           <h1 className="text-3xl font-bold tracking-tight">Daily Reflection</h1>
-          <p className="text-muted-foreground">Log your mood and thoughts. We'll find the hidden patterns.</p>
+          <p className="text-muted-foreground">Log your mood and thoughts. We&apos;ll find the hidden patterns.</p>
         </div>
 
         {error && (
@@ -155,7 +155,7 @@ export default function ReflectPage() {
 
         {/* Step 2: ChatGPT style typing & voice reflection bar */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-foreground">2. What's on your mind?</h2>
+          <h2 className="text-xl font-semibold text-foreground">2. What&apos;s on your mind?</h2>
           
           <div className="space-y-3">
             {/* Audio attachment display pill */}

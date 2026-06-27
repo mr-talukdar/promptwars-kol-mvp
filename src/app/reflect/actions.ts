@@ -10,7 +10,6 @@ import {
 import { JournalInputSchema } from '@/lib/validators';
 import { JournalEntry } from '@/lib/types';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function analyzeDay(formData: FormData) {
   const supabase = await createClient();
