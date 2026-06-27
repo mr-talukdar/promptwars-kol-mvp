@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sahaara 🌟
 
-## Getting Started
+**Sahaara** is an AI-powered emotional pattern discovery and mindset tracking platform designed specifically for developers and high-stress professionals. It goes beyond basic mood trackers by analyzing written reflection logs using generative AI, mapping out hidden mental stress patterns, and providing actionable insights before burnout happens.
 
-First, run the development server:
+---
+
+## 🚀 Key Features
+
+- **Deep Reflection Intake**: Share your current state, concerns, or daily thoughts in plain text.
+- **Gemini-Powered Mindset Analysis**: Analyzes text inputs to detect primary emotions, stress triggers, confidence levels, and cognitive distortions.
+- **Interactive Mood Projection Graph**: Maps emotional metrics (Confidence, Stress DNA, and Hidden Emotional Patterns) over time.
+- **Historical Insights Log**: Access past reflection logs along with AI analysis history to track your mental well-being trajectory.
+- **Google OAuth Integration**: Simple, secure sign-in powered by Supabase.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Backend / Database**: [Supabase](https://supabase.com/) (Auth, Database access, and local SSR configuration)
+- **AI Integration**: [@google/genai SDK](https://www.npmjs.com/package/@google/genai) (using `gemini-3.5-flash`)
+- **Testing**: [Vitest](https://vitest.dev/) & React Testing Library
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+---
+
+## 📋 Environment Configuration
+
+Create a `.env.local` file in the root directory of your project with the following keys:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Supabase Keys
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_anon_key
+
+# Google Gemini API
+GEMINI_API_KEY=your_gemini_api_key
+NEXT_PUBLIC_GEMINI_MODEL=gemini-3.5-flash
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 💻 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-## Learn More
+### 2. Run the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Build for Production
+```bash
+npm run build
+npm run start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Running Tests
+Ensure all components, utilities, and validation layers function correctly with Vitest:
+```bash
+npm run test
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 5. Code Quality & Linting
+Run ESLint check:
+```bash
+npm run lint
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📁 Directory Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+├── src/
+│   ├── app/                # Next.js App Router (pages: dashboard, reflect, auth)
+│   ├── components/         # Reusable UI components & layouts (Navbar, AuthButton)
+│   ├── lib/                # Core business logic, type definitions, and client utilities
+│   │   ├── gemini.ts       # Gemini SDK client setup and prompt orchestration
+│   │   ├── mood-utils.ts   # Formatting & chart helper logic
+│   │   ├── types.ts        # TypeScript declarations
+│   │   └── validators.ts   # Form/data validators (Zod schemas)
+│   ├── utils/              # Helper utilities (Supabase SSR client generators)
+│   └── __tests__/          # Vitest suite for component and utility coverage
+```
