@@ -1,6 +1,6 @@
 # Sahaara 🌟
 
-**Sahaara** is an AI-powered emotional pattern discovery and mindset tracking platform designed specifically for developers and high-stress professionals. It goes beyond basic mood trackers by analyzing written reflection logs using generative AI, mapping out hidden mental stress patterns, and providing actionable insights before burnout happens.
+**Sahaara** is an AI-powered emotional pattern discovery and mindset tracking platform designed specifically for high-stress competetive exam students(JEE,NEET) and professionals professionals. It goes beyond basic mood trackers by analyzing written reflection logs using generative AI, mapping out hidden mental stress patterns, and providing actionable insights before burnout happens.
 
 ---
 
