@@ -63,7 +63,7 @@ export async function analyzeDay(formData: FormData) {
       created_at: new Date().toISOString()
     } as JournalEntry;
     
-    const analysisHistory = [currentEntry, ...(history || [])];
+    const analysisHistory = [currentEntry, ...((history as unknown as JournalEntry[]) || [])];
 
     // 3 & 4. Generate Stress DNA and Hidden Pattern concurrently
     const [stressDNA, patternData] = await Promise.all([
